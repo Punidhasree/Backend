@@ -3,6 +3,7 @@ import path , { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import authRoutes from './routes/authroute.js'
 import todoRoutes from './routes/todo.js'
+import authMiddleware from './middleware/auth.js'
 
 const app = express()
 const PORT = process.env.port || 5000
@@ -18,7 +19,7 @@ app.get('/' ,(req,res) => {
 })
 
 app.use('/auth' , authRoutes)
-app.use('/todos', todoRoutes)
+app.use('/todos', authMiddleware, todoRoutes)
 app.listen(PORT , () => {
     console.log(`server is up and listening to port ${PORT}`)}
 )
