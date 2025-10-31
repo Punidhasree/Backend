@@ -1,0 +1,7 @@
+POST  http://localhost:5000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYxODQwMDM2LCJleHAiOjE3NjE5MjY0MzZ9.VwoGY73mU9jbZKYvIb0azVkjotMemou98w0pmgGXhuA
+Content-Type: application/json
+
+{
+"task": "Finish coding the projects"
+}
