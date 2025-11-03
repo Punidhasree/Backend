@@ -1,7 +1,8 @@
-POST  http://localhost:5000/todos
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYxODQwMDM2LCJleHAiOjE3NjE5MjY0MzZ9.VwoGY73mU9jbZKYvIb0azVkjotMemou98w0pmgGXhuA
+GET  http://localhost:5000/todos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzYyMTcwOTY3LCJleHAiOjE3NjIyNTczNjd9.oo3rU7EG_E7NYMY-OzcFV9GDzwINorEvPF6IYAvOgrs
 Content-Type: application/json
 
 {
-"task": "Finish coding the projects"
+"task":"shvcsbckw"
 }
+

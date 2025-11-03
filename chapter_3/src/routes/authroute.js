@@ -7,7 +7,7 @@ import prisma from '../prismaClient.js'
 const router = express.Router()
 router.post('/register' , async (req,res) => {
     const { username ,password } =req.body
-    const hashedpassword = bcrypt.hashSync(password,8)
+    const hashedPassword = bcrypt.hashSync(password,8)
     try {
         const user = await prisma.user.create({
             data: {
@@ -25,8 +25,7 @@ router.post('/register' , async (req,res) => {
         
     })
         // create a token
-        const token = jwt.sign({ id: result.lastInsertRowid }, process.env.JWT_SECRET, { expiresIn: '24h' })
-        res.json({ token })
+        res.send('user created succesfully')
 
     }
     catch(err) {

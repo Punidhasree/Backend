@@ -23,7 +23,8 @@ router.post('/', async (req,res) => {
         }
     })
 
-    res.json({ id: result.lastInsertRowid, task, completed: 0 })
+    res.json(todo);
+
 })
 //update todos
 router.put('/:id' , async (req,res) => {
