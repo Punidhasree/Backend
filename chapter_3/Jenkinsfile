@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    environment {
+        // Docker Hub credentials (add in Jenkins → Credentials)
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        IMAGE_NAME = "punidha/my-backend-app"
+
+        // EC2 SSH credentials (add in Jenkins → Credentials)
+        EC2_CREDENTIALS = 'ec2-ssh'
+        EC2_HOST = '16.170.140.88'  
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo "Pulling latest code from GitHub..."
+                git branch: 'main', url: 'https://github.com/Punidhasree/Backend.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image..."
+                sh 'docker build -t my-backend-app .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                echo "Pushing image to Docker Hub..."
+                sh '''
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                docker tag my-backend-app $IMAGE_NAME:latest
+                docker push $IMAGE_NAME:latest
+                '''
+            }
+        }
+
+        stage('Deploy on EC2') {
+            steps {
+                echo "Deploying to EC2..."
+                sshagent(credentials: [EC2_CREDENTIALS]) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ec2-user@$EC2_HOST "
+                        echo 'Pulling latest image...'
+                        docker pull $IMAGE_NAME:latest
+
+                        echo 'Stopping old container...'
+                        docker stop backend || true
+
+                        echo 'Removing old container...'
+                        docker rm backend || true
+
+                        echo 'Starting new container...'
+                        docker run -d --name backend -p 5000:5000 $IMAGE_NAME:latest
+
+                        echo 'Deployment complete!'
+                    "
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful!"
+        }
+        failure {
+            echo "Deployment failed. Check logs!"
+        }
+    }
+}
